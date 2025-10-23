@@ -11,7 +11,6 @@ export default function OnboardingScreen() {
     name: '',
     birthDate: '',
     gender: '' as 'masculin' | 'feminin' | 'altul' | '',
-    location: '',
     focusArea: 'bani' as 'bani' | 'sanatate' | 'iubire' | 'incredere' | 'calm' | 'focus',
     intensity: 'moderate' as 'gentle' | 'moderate' | 'intense',
     style: 'classic' as 'classic' | 'modern' | 'spiritual',
@@ -94,7 +93,6 @@ export default function OnboardingScreen() {
         name: formData.name,
         birthDate: formData.birthDate,
         gender: formData.gender,
-        location: formData.location,
         goals: formData.goals,
         experience: formData.experience,
         motivation: formData.motivation,
@@ -233,16 +231,6 @@ export default function OnboardingScreen() {
               </View>
             </View>
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Locația (opțional)</Text>
-              <TextInput
-                style={styles.textInput}
-                value={formData.location}
-                onChangeText={(text) => setFormData(prev => ({ ...prev, location: text }))}
-                placeholder="Oraș, țară"
-                placeholderTextColor="#9CA3AF"
-              />
-            </View>
           </View>
         );
 
