@@ -507,7 +507,7 @@ function computePrefixMatchPercent(target: string, transcript: string): number {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FAFAFA', // Alb perlat
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -539,17 +539,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   readingContainer: {
-    backgroundColor: '#F9FAFB',
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
+    backgroundColor: '#FFFFFF', // Alb pentru carduri
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 2,
+    borderColor: '#6ECEDA', // Turcoaz
+    shadowColor: '#1E2A38',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
   },
   aff: {
-    fontSize: 18,
-    lineHeight: 24,
+    fontSize: 20,
+    lineHeight: 28,
     marginBottom: 12,
     textAlign: 'center',
+    color: '#1E2A38', // Albastru intens
+    fontWeight: '500',
   },
   reps: {
     fontSize: 16,
@@ -568,34 +575,45 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   sessionInfo: {
-    backgroundColor: '#F0F9FF',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: '#F5E8C7', // Bej pal
+    borderRadius: 16,
+    padding: 20,
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: '#BAE6FD',
+    borderWidth: 2,
+    borderColor: '#FFD56B', // Auriu cald
+    shadowColor: '#1E2A38',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   sessionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#0C4A6E',
-    marginBottom: 4,
+    color: '#1E2A38', // Albastru intens
+    marginBottom: 8,
   },
   sessionSubtitle: {
-    fontSize: 14,
-    color: '#0369A1',
+    fontSize: 16,
+    color: '#6ECEDA', // Turcoaz
+    fontWeight: '500',
   },
   premiumBanner: {
-    backgroundColor: '#FEF3C7',
-    borderColor: '#F59E0B',
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 16,
+    backgroundColor: '#C7B9FF', // Lavandă pală
+    borderColor: '#A3C4A7', // Verde salvie
+    borderWidth: 2,
+    borderRadius: 12,
+    padding: 20,
     marginBottom: 20,
     alignItems: 'center',
+    shadowColor: '#1E2A38',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   premiumText: {
-    color: '#92400E',
+    color: '#1E2A38', // Albastru intens
     fontWeight: '600',
     fontSize: 16,
     textAlign: 'center',
@@ -738,15 +756,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   startButton: {
-    backgroundColor: '#059669',
+    backgroundColor: '#FFD56B', // Auriu cald
     paddingVertical: 16,
     paddingHorizontal: 24,
-    borderRadius: 8,
+    borderRadius: 12,
     alignItems: 'center',
     marginTop: 16,
+    shadowColor: '#1E2A38',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   startButtonText: {
-    color: '#fff',
+    color: '#1E2A38', // Albastru intens pentru text
     fontWeight: 'bold',
     fontSize: 16,
   },

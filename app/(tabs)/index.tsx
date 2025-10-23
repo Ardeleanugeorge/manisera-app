@@ -48,10 +48,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 16,
+    backgroundColor: '#FAFAFA', // Alb perlat
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
+    color: '#1E2A38', // Albastru intens
+    marginBottom: 8,
   },
   grid: {
     marginTop: 16,
@@ -61,22 +64,30 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     margin: '1%',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRadius: 10,
+    borderColor: '#6ECEDA', // Turcoaz
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 50,
     minWidth: 50,
+    backgroundColor: '#FFFFFF', // Alb pentru carduri
+    shadowColor: '#1E2A38',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   dayText: {
     fontWeight: '600',
+    color: '#1E2A38', // Albastru intens
+    fontSize: 14,
   },
   icon: {
     position: 'absolute',
     top: 2,
     right: 2,
     fontSize: 20,
-    color: '#10B981',
+    color: '#A3C4A7', // Verde salvie pentru succes
     fontWeight: 'bold',
   },
   lockIcon: {
