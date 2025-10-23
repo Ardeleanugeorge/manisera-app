@@ -33,6 +33,12 @@ export function generateThirtyDayPlan(category: FocusCategory, userProfile?: any
   };
 
   const plan: DayPlan[] = [];
+  
+  // Create a unique seed based on user profile for personalization
+  const userSeed = userProfile ? 
+    `${userProfile.id || 'default'}_${userProfile.name || 'user'}_${category}` : 
+    `${Date.now()}_${category}`;
+  
   for (let d = 1; d <= 30; d++) {
     let block: 'activate' | 'deepen' | 'integrate';
     if (d <= 7) block = 'activate';
@@ -46,10 +52,16 @@ export function generateThirtyDayPlan(category: FocusCategory, userProfile?: any
       const sessionPhrases = sessionData[sessionType];
       const sessionAffirmations: string[] = [];
       
+      // Create personalized seed for this day and session
+      const daySeed = `${userSeed}_${d}_${sessionType}`;
+      const seedNumber = hashString(daySeed);
+      
+      // Shuffle affirmations based on personalized seed
+      const shuffledPhrases = shuffleArray([...sessionPhrases], seedNumber);
+      
       // Select 3 unique affirmations for this session
       for (let i = 0; i < 3; i++) {
-        const phraseIndex = (d - 1 + i) % sessionPhrases.length;
-        sessionAffirmations.push(sessionPhrases[phraseIndex]);
+        sessionAffirmations.push(shuffledPhrases[i]);
       }
       return sessionAffirmations;
     };
@@ -74,6 +86,38 @@ export function generateThirtyDayPlan(category: FocusCategory, userProfile?: any
   }
 
   return plan;
+}
+
+// Hash function to convert string to number
+function hashString(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return Math.abs(hash);
+}
+
+// Shuffle array with seed for consistent randomization
+function shuffleArray<T>(array: T[], seed: number): T[] {
+  const shuffled = [...array];
+  let currentIndex = shuffled.length;
+  let randomIndex: number;
+  
+  // Use seed for pseudo-random generation
+  const seededRandom = (seed: number) => {
+    const x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  };
+  
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(seededRandom(seed + currentIndex) * currentIndex);
+    currentIndex--;
+    [shuffled[currentIndex], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[currentIndex]];
+  }
+  
+  return shuffled;
 }
 
 

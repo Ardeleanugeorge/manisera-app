@@ -4,9 +4,11 @@ import { Link } from 'expo-router';
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
 import { generateThirtyDayPlan } from '@/constants/plan';
+import { getUserProfile } from '@/utils/personalization';
 
 export default function ProgramScreen() {
-  const plan = generateThirtyDayPlan('bani');
+  const userProfile = getUserProfile();
+  const plan = generateThirtyDayPlan(userProfile.preferences?.focusArea || 'bani', userProfile);
   
   // Check which days are completed
   const completedDays = JSON.parse(localStorage.getItem('manisera_completed_days') || '[]');
