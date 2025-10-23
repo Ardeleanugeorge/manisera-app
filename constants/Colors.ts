@@ -1,59 +1,40 @@
 // 🌅 Paletă principală (energie + echilibru)
+const tintColorLight = '#FFD56B'; // Auriu cald
+const tintColorDark = '#1E2A38'; // Albastru intens de noapte
+
 export const Colors = {
-  // Culori principale
-  primary: {
-    // 🌕 Auriu cald - lumina, energia, abundența
-    gold: '#FFD56B',
-    // 🌙 Albastru intens de noapte - echilibru, profunzime, calm
-    nightBlue: '#1E2A38',
-    // 🌊 Turcoaz apă - claritate, liniște, fluiditate
-    turquoise: '#6ECEDA',
-    // 🌤️ Bej pal / nisipiu - neutralitate elegantă
-    sand: '#F5E8C7',
-    // ✨ Alb perlat - puritate, curățenie vizuală
-    pearl: '#FAFAFA',
+  light: {
+    text: '#1E2A38', // Albastru intens
+    background: '#FAFAFA', // Alb perlat
+    tint: tintColorLight,
+    icon: '#1E2A38', // Albastru intens
+    tabIconDefault: '#6ECEDA', // Turcoaz apă
+    tabIconSelected: tintColorLight,
+    primary: '#FFD56B', // Auriu cald
+    secondary: '#6ECEDA', // Turcoaz apă
+    tertiary: '#A3C4A7', // Verde salvie
+    neutral: '#F5E8C7', // Bej pal
+    accentLavender: '#C7B9FF', // Lavandă pală
+    accentOrange: '#FFB18A', // Portocaliu soft
+    error: '#DC2626', // Roșu pentru erori
+    success: '#10B981', // Verde pentru succes
   },
-  
-  // Accente opționale
-  accent: {
-    // 🩵 Lavandă pală - calm mental, spiritualitate
-    lavender: '#C7B9FF',
-    // 🧡 Portocaliu soft - energie pozitivă blândă
-    softOrange: '#FFB18A',
-    // 🌿 Verde salvie - armonie și echilibru natural
-    sage: '#A3C4A7',
+  dark: {
+    text: '#FAFAFA', // Alb perlat
+    background: '#1E2A38', // Albastru intens de noapte
+    tint: tintColorDark,
+    icon: '#FAFAFA', // Alb perlat
+    tabIconDefault: '#6ECEDA', // Turcoaz apă
+    tabIconSelected: tintColorDark,
+    primary: '#FFD56B', // Auriu cald
+    secondary: '#6ECEDA', // Turcoaz apă
+    tertiary: '#A3C4A7', // Verde salvie
+    neutral: '#F5E8C7', // Bej pal
+    accentLavender: '#C7B9FF', // Lavandă pală
+    accentOrange: '#FFB18A', // Portocaliu soft
+    error: '#EF4444', // Roșu pentru erori
+    success: '#34D399', // Verde pentru succes
   },
-  
-  // Culori pentru stări
-  state: {
-    success: '#A3C4A7', // Verde salvie pentru succes
-    warning: '#FFB18A', // Portocaliu soft pentru atenționare
-    error: '#FF6B6B', // Roșu pentru erori
-    info: '#6ECEDA', // Turcoaz pentru informații
-  },
-  
-  // Culori pentru text
-  text: {
-    primary: '#1E2A38', // Albastru intens pentru text principal
-    secondary: '#6B7280', // Gri pentru text secundar
-    light: '#FAFAFA', // Alb perlat pentru text pe fundal închis
-    accent: '#FFD56B', // Auriu pentru text accentuat
-  },
-  
-  // Culori pentru fundal
-  background: {
-    primary: '#FAFAFA', // Alb perlat pentru fundal principal
-    secondary: '#F5E8C7', // Bej pal pentru fundal secundar
-    card: '#FFFFFF', // Alb pentru carduri
-    overlay: 'rgba(30, 42, 56, 0.8)', // Albastru intens cu transparență
-  },
-  
-  // Culori pentru borduri
-  border: {
-    light: '#F5E8C7', // Bej pal pentru borduri ușoare
-    medium: '#6ECEDA', // Turcoaz pentru borduri medii
-    strong: '#1E2A38', // Albastru intens pentru borduri puternice
-  }
 };
 
 // Gradient-uri pentru efecte speciale
