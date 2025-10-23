@@ -56,6 +56,9 @@ export default function SessionScreen() {
   
   const { isPremium, setShowUpgradeModal } = usePremium();
   
+  // Detect Safari iPhone
+  const isSafariiPhone = /iPhone|iPad|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent);
+  
   // Streak and achievements tracking
   const [streak, setStreak] = useState(0);
   const [achievements, setAchievements] = useState<string[]>([]);
@@ -113,13 +116,32 @@ export default function SessionScreen() {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
       console.log('Speech recognition not supported');
+      alert('Recunoașterea vocală nu este suportată pe acest dispozitiv');
       return;
     }
 
     const instance = new SpeechRecognition();
-    instance.continuous = true;
-    instance.interimResults = true;
+    
+    // Configure differently for Safari iPhone
+    if (isSafariiPhone) {
+      instance.continuous = false; // Safari iPhone doesn't support continuous
+      instance.interimResults = false; // Safari iPhone doesn't support interim results
       instance.lang = 'ro-RO';
+      instance.maxAlternatives = 1;
+    } else {
+      instance.continuous = true;
+      instance.interimResults = true;
+      instance.lang = 'ro-RO';
+      instance.maxAlternatives = 1;
+    }
+    
+    // Add timeout to prevent hanging
+    const timeout = setTimeout(() => {
+      if (listeningRef.current) {
+        console.log('Speech recognition timeout');
+        stopListening();
+      }
+    }, 30000); // 30 seconds timeout
 
     instance.onstart = () => {
       console.log('Speech recognition started');
@@ -142,15 +164,23 @@ export default function SessionScreen() {
             continue;
           }
 
-          // Check if the spoken text matches the affirmation
+          // Simplified matching for Safari iPhone
           const affirmationWords = currentAffirmation.toLowerCase().split(' ');
           const spokenWords = finalText.split(' ');
           
+          // More lenient matching for Safari iPhone
           const matchedWords = affirmationWords.filter(word => 
-            spokenWords.some(spoken => spoken.includes(word) || word.includes(spoken))
+            spokenWords.some(spoken => 
+              spoken.includes(word) || 
+              word.includes(spoken) || 
+              spoken.length > 3 && word.length > 3 && 
+              (spoken.includes(word.substring(0, 3)) || word.includes(spoken.substring(0, 3)))
+            )
           );
           
-          if (matchedWords.length >= 2) {
+          // Lower threshold for Safari iPhone
+          const minMatches = isSafariiPhone ? 1 : 2;
+          if (matchedWords.length >= minMatches) {
             console.log('🎯 MATCH FOUND! Incrementing reps');
             repLockRef.current = true;
             setReps(prev => {
@@ -234,15 +264,26 @@ export default function SessionScreen() {
 
     instance.onerror = (e: any) => {
       console.log('Speech recognition error:', e);
+      clearTimeout(timeout);
+      setListening(false);
+      listeningRef.current = false;
+      
+      // Handle specific errors
+      if (e.error === 'not-allowed') {
+        alert('Microfonul a fost blocat. Te rugăm să permiți accesul la microfon în setările browserului.');
+      } else if (e.error === 'no-speech') {
+        alert('Nu s-a detectat vorbire. Te rugăm să încerci din nou.');
+      } else if (e.error === 'network') {
+        alert('Eroare de rețea. Verifică conexiunea la internet.');
+      }
+    };
+
+    instance.onend = () => {
+      console.log('Speech recognition ended');
+      clearTimeout(timeout);
       setListening(false);
       listeningRef.current = false;
     };
-
-      instance.onend = () => {
-      console.log('Speech recognition ended');
-        setListening(false);
-        listeningRef.current = false;
-      };
 
       recognitionRef.current = instance;
     instance.start();
@@ -321,7 +362,45 @@ export default function SessionScreen() {
               style={styles.startButton}
               onPress={startListening}
             >
-              <Text style={styles.startButtonText}>START</Text>
+              <Text style={styles.startButtonText}>🎤 ROSTEȘTE</Text>
+            </Pressable>
+          )}
+          
+          {/* Alternative button for Safari iPhone */}
+          {!listening && reps < targetReps && isSafariiPhone && (
+            <Pressable 
+              style={styles.alternativeButton}
+              onPress={() => {
+                // Manual increment for Safari iPhone
+                setReps(prev => {
+                  const next = Math.min(targetReps, prev + 1);
+                  
+                  if (next >= targetReps) {
+                    // Move to next affirmation or complete session
+                    if (currentAffirmationIndex < morningAffirmations.length - 1) {
+                      setTimeout(() => {
+                        setCurrentAffirmationIndex(prev => prev + 1);
+                        setReps(0);
+                      }, 1000);
+                    } else {
+                      // Session completed
+                      setTimeout(() => {
+                        localStorage.removeItem(`manisera_free_progress_${allowedDay}`);
+                        const completedDays = JSON.parse(localStorage.getItem('manisera_completed_days') || '[]');
+                        if (!completedDays.includes(allowedDay)) {
+                          completedDays.push(allowedDay);
+                          localStorage.setItem('manisera_completed_days', JSON.stringify(completedDays));
+                          window.location.reload();
+                        }
+                      }, 1000);
+                    }
+                  }
+                  
+                  return next;
+                });
+              }}
+            >
+              <Text style={styles.alternativeButtonText}>✅ AM ROSTIT</Text>
             </Pressable>
           )}
           
@@ -683,6 +762,19 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   startButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  alternativeButton: {
+    backgroundColor: '#3B82F6',
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  alternativeButtonText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
