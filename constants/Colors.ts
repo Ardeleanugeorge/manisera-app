@@ -45,18 +45,5 @@ export const Gradients = {
   energy: ['#FFD56B', '#6ECEDA'], // Auriu la turcoaz
 };
 
-// Culori pentru teme
-export const ThemeColors = {
-  light: {
-    background: Colors.background.primary,
-    surface: Colors.background.card,
-    text: Colors.text.primary,
-    accent: Colors.primary.gold,
-  },
-  dark: {
-    background: Colors.primary.nightBlue,
-    surface: '#2A3A4A',
-    text: Colors.text.light,
-    accent: Colors.primary.gold,
-  }
-};
+// Export default pentru compatibilitate cu importuri
+export default Colors;
