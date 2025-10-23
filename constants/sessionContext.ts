@@ -2,40 +2,40 @@ export type SessionType = 'morning' | 'afternoon' | 'evening';
 
 export const sessionContextMessages: Record<SessionType, string[]> = {
   morning: [
-    "Respir adânc și simt energia zilei curgând prin mine.",
-    "Îmi deschid inima la toate oportunitățile de azi.",
-    "Sunt pregătit să primesc toate binecuvântările zilei.",
-    "Energia mea este puternică și focalizată.",
-    "Sunt deschis la toate posibilitățile care vin spre mine.",
-    "Îmi permit să fiu vulnerabil și autentic.",
-    "Sunt în pace cu toate aspectele vieții mele.",
-    "Îmi iubesc și îmi accept toate părțile.",
-    "Îmi permit să fiu fericit și împlinit.",
-    "Sunt deschis la toate formele de abundență."
+    "Începe ziua cu intenție clară și energie pozitivă.",
+    "Deschide-te la toate oportunitățile de azi.",
+    "Pregătește-te să primești toate binecuvântările zilei.",
+    "Focalizează-te pe obiectivele tale importante.",
+    "Deschide-te la toate posibilitățile care vin spre tine.",
+    "Permite-ți să fii vulnerabil și autentic.",
+    "Fii în pace cu toate aspectele vieții tale.",
+    "Iubește-te și acceptă toate părțile tale.",
+    "Permite-ți să fii fericit și împlinit.",
+    "Deschide-te la toate formele de abundență."
   ],
   afternoon: [
-    "Sunt recunoscător pentru toate realizările de azi.",
-    "Energia mea este echilibrată și puternică.",
-    "Sunt deschis la toate oportunitățile care se prezintă.",
-    "Îmi permit să fiu vulnerabil și autentic.",
-    "Sunt în pace cu toate aspectele vieții mele.",
-    "Îmi iubesc și îmi accept toate părțile.",
-    "Sunt demn de toate binecuvântările.",
-    "Îmi permit să fiu fericit și împlinit.",
-    "Sunt deschis la toate formele de iubire.",
-    "Îmi permit să fiu vulnerabil și autentic."
+    "Fii recunoscător pentru toate realizările de azi.",
+    "Menține energia echilibrată și puternică.",
+    "Deschide-te la toate oportunitățile care se prezintă.",
+    "Permite-ți să fii vulnerabil și autentic.",
+    "Fii în pace cu toate aspectele vieții tale.",
+    "Iubește-te și acceptă toate părțile tale.",
+    "Merită toate binecuvântările.",
+    "Permite-ți să fii fericit și împlinit.",
+    "Deschide-te la toate formele de iubire.",
+    "Permite-ți să fii vulnerabil și autentic."
   ],
   evening: [
-    "Mulțumesc pentru toate experiențele din ziua de azi.",
-    "Sunt recunoscător pentru toate lecțiile învățate.",
-    "Îmi permit să fiu vulnerabil și autentic.",
-    "Sunt în pace cu toate aspectele vieții mele.",
-    "Îmi iubesc și îmi accept toate părțile.",
-    "Sunt demn de toate binecuvântările.",
-    "Îmi permit să fiu fericit și împlinit.",
-    "Sunt deschis la toate formele de iubire.",
-    "Îmi permit să fiu vulnerabil și autentic.",
-    "Sunt în pace cu toate aspectele vieții mele."
+    "Mulțumește pentru toate experiențele din ziua de azi.",
+    "Fii recunoscător pentru toate lecțiile învățate.",
+    "Permite-ți să fii vulnerabil și autentic.",
+    "Fii în pace cu toate aspectele vieții tale.",
+    "Iubește-te și acceptă toate părțile tale.",
+    "Merită toate binecuvântările.",
+    "Permite-ți să fii fericit și împlinit.",
+    "Deschide-te la toate formele de iubire.",
+    "Permite-ți să fii vulnerabil și autentic.",
+    "Fii în pace cu toate aspectele vieții tale."
   ]
 };
 
@@ -43,16 +43,16 @@ export const sessionContextMessages: Record<SessionType, string[]> = {
 export const categoryContextMessages = {
   bani: {
     morning: [
-      "Respir adânc și simt abundența curgând prin mine.",
-      "Îmi deschid inima la toate oportunitățile financiare de azi.",
-      "Sunt pregătit să primesc toate binecuvântările financiare.",
-      "Energia prosperității este puternică în mine.",
-      "Sunt deschis la toate sursele de abundență.",
-      "Îmi permit să fiu vulnerabil și autentic cu banii.",
-      "Sunt în pace cu toate aspectele financiare.",
-      "Îmi iubesc și îmi accept abundența în toate formele.",
-      "Îmi permit să fiu fericit și împlinit financiar.",
-      "Sunt deschis la toate formele de prosperitate."
+      "Începe ziua cu intenție clară pentru abundență financiară.",
+      "Deschide-te la toate oportunitățile financiare de azi.",
+      "Pregătește-te să primești toate binecuvântările financiare.",
+      "Focalizează-te pe energia prosperității din tine.",
+      "Deschide-te la toate sursele de abundență.",
+      "Permite-ți să fii vulnerabil și autentic cu banii.",
+      "Fii în pace cu toate aspectele financiare.",
+      "Iubește-te și acceptă abundența în toate formele.",
+      "Permite-ți să fii fericit și împlinit financiar.",
+      "Deschide-te la toate formele de prosperitate."
     ],
     afternoon: [
       "Sunt recunoscător pentru toate oportunitățile financiare de azi.",
