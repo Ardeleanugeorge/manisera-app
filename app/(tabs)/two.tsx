@@ -164,21 +164,30 @@ export default function SessionScreen() {
             continue;
           }
 
-          // Simplified matching for Safari iPhone
+          // Ultra lenient matching for Safari iPhone
           const affirmationWords = currentAffirmation.toLowerCase().split(' ');
           const spokenWords = finalText.split(' ');
           
-          // More lenient matching for Safari iPhone
+          // Very permissive matching for Safari iPhone
           const matchedWords = affirmationWords.filter(word => 
-            spokenWords.some(spoken => 
-              spoken.includes(word) || 
-              word.includes(spoken) || 
-              spoken.length > 3 && word.length > 3 && 
-              (spoken.includes(word.substring(0, 3)) || word.includes(spoken.substring(0, 3)))
-            )
+            spokenWords.some(spoken => {
+              // Exact match
+              if (spoken === word) return true;
+              // Contains match
+              if (spoken.includes(word) || word.includes(spoken)) return true;
+              // Partial match for longer words
+              if (word.length > 4 && spoken.length > 4) {
+                return spoken.includes(word.substring(0, 4)) || word.includes(spoken.substring(0, 4));
+              }
+              // Very loose match for short words
+              if (word.length <= 4 && spoken.length <= 4) {
+                return spoken.includes(word.substring(0, 2)) || word.includes(spoken.substring(0, 2));
+              }
+              return false;
+            })
           );
           
-          // Lower threshold for Safari iPhone
+          // Very low threshold for Safari iPhone
           const minMatches = isSafariiPhone ? 1 : 2;
           if (matchedWords.length >= minMatches) {
             console.log('🎯 MATCH FOUND! Incrementing reps');
@@ -272,9 +281,21 @@ export default function SessionScreen() {
       if (e.error === 'not-allowed') {
         alert('Microfonul a fost blocat. Te rugăm să permiți accesul la microfon în setările browserului.');
       } else if (e.error === 'no-speech') {
-        alert('Nu s-a detectat vorbire. Te rugăm să încerci din nou.');
+        if (isSafariiPhone) {
+          console.log('Safari iPhone: No speech detected, trying again...');
+          // Auto-retry for Safari iPhone
+          setTimeout(() => {
+            if (!listeningRef.current) {
+              startListening();
+            }
+          }, 1000);
+        } else {
+          alert('Nu s-a detectat vorbire. Te rugăm să încerci din nou.');
+        }
       } else if (e.error === 'network') {
         alert('Eroare de rețea. Verifică conexiunea la internet.');
+      } else if (e.error === 'aborted') {
+        console.log('Speech recognition aborted, this is normal for Safari iPhone');
       }
     };
 
@@ -366,43 +387,6 @@ export default function SessionScreen() {
             </Pressable>
           )}
           
-          {/* Alternative button for Safari iPhone */}
-          {!listening && reps < targetReps && isSafariiPhone && (
-            <Pressable 
-              style={styles.alternativeButton}
-              onPress={() => {
-                // Manual increment for Safari iPhone
-                setReps(prev => {
-                  const next = Math.min(targetReps, prev + 1);
-                  
-                  if (next >= targetReps) {
-                    // Move to next affirmation or complete session
-                    if (currentAffirmationIndex < morningAffirmations.length - 1) {
-                      setTimeout(() => {
-                        setCurrentAffirmationIndex(prev => prev + 1);
-                        setReps(0);
-                      }, 1000);
-                    } else {
-                      // Session completed
-                      setTimeout(() => {
-                        localStorage.removeItem(`manisera_free_progress_${allowedDay}`);
-                        const completedDays = JSON.parse(localStorage.getItem('manisera_completed_days') || '[]');
-                        if (!completedDays.includes(allowedDay)) {
-                          completedDays.push(allowedDay);
-                          localStorage.setItem('manisera_completed_days', JSON.stringify(completedDays));
-                          window.location.reload();
-                        }
-                      }, 1000);
-                    }
-                  }
-                  
-                  return next;
-                });
-              }}
-            >
-              <Text style={styles.alternativeButtonText}>✅ AM ROSTIT</Text>
-            </Pressable>
-          )}
           
           {/* Listening state */}
           {listening && (
@@ -762,19 +746,6 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   startButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  alternativeButton: {
-    backgroundColor: '#3B82F6',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  alternativeButtonText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
