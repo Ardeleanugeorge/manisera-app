@@ -16,7 +16,6 @@ export default function OnboardingScreen() {
     style: 'classic' as 'classic' | 'modern' | 'spiritual',
     goals: [] as string[],
     experience: 'incepator' as 'incepator' | 'mediu' | 'avansat',
-    motivation: '',
     timePreference: 'dimineata' as 'dimineata' | 'dupa-amiaza' | 'seara' | 'flexibil'
   });
 
@@ -76,7 +75,7 @@ export default function OnboardingScreen() {
   ];
 
   const handleNext = () => {
-    if (step < 8) {
+    if (step < 7) {
       setStep(step + 1);
     } else {
       // Complete onboarding
@@ -95,7 +94,6 @@ export default function OnboardingScreen() {
         gender: formData.gender,
         goals: formData.goals,
         experience: formData.experience,
-        motivation: formData.motivation,
         timePreference: formData.timePreference
       };
       localStorage.setItem('manisera_user_profile', JSON.stringify(updatedProfile));
@@ -304,27 +302,6 @@ export default function OnboardingScreen() {
           </View>
         );
 
-      case 6:
-        return (
-          <View style={styles.stepContainer}>
-            <Text style={styles.stepTitle}>Ce te motivează?</Text>
-            <Text style={styles.stepDescription}>
-              Spune-mi ce te determină să îți îmbunătățești viața. Voi folosi această informație pentru afirmații mai relevante.
-            </Text>
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Motivația ta</Text>
-              <TextInput
-                style={[styles.textInput, styles.textArea]}
-                value={formData.motivation}
-                onChangeText={(text) => setFormData(prev => ({ ...prev, motivation: text }))}
-                placeholder="De exemplu: Vreau să devin cea mai bună versiune a mea..."
-                placeholderTextColor="#9CA3AF"
-                multiline
-                numberOfLines={3}
-              />
-            </View>
-          </View>
-        );
 
       case 7:
         return (
@@ -400,9 +377,9 @@ export default function OnboardingScreen() {
       <View style={styles.header}>
         <Text style={styles.title}>Manisera</Text>
         <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${(step / 8) * 100}%` }]} />
+          <View style={[styles.progressFill, { width: `${(step / 7) * 100}%` }]} />
         </View>
-        <Text style={styles.progressText}>Pasul {step} din 8</Text>
+        <Text style={styles.progressText}>Pasul {step} din 7</Text>
       </View>
 
       {renderStep()}
@@ -423,7 +400,7 @@ export default function OnboardingScreen() {
           disabled={!formData.name || (step === 7 && formData.goals.length === 0)}
         >
           <Text style={styles.nextButtonText}>
-            {step === 8 ? 'Finalizează' : 'Continuă'}
+            {step === 7 ? 'Finalizează' : 'Continuă'}
           </Text>
         </Pressable>
       </View>
