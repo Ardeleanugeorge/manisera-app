@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "manisera-app",
-    "slug": "manisera-app",
+    "name": "Manisera",
+    "slug": "manisera",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "maniseraapp",
+    "scheme": "manisera",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -14,13 +14,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.manisera.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "package": "com.manisera.app",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },

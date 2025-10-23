@@ -29,8 +29,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Program',
+          tabBarIcon: ({ color }) => <TabBarIcon name="calendar-check-o" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -50,8 +50,15 @@ export default function TabLayout() {
       <Tabs.Screen
         name="two"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Sesiune Free',
+          tabBarIcon: ({ color }) => <TabBarIcon name="microphone" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="sessions"
+        options={{
+          title: 'Sesiuni Pro',
+          tabBarIcon: ({ color }) => <TabBarIcon name="clock-o" color={color} />,
         }}
       />
     </Tabs>
