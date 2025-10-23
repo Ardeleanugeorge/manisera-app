@@ -303,7 +303,7 @@ export default function OnboardingScreen() {
         );
 
 
-      case 7:
+      case 6:
         return (
           <View style={styles.stepContainer}>
             <Text style={styles.stepTitle}>Ce vrei să îți îmbunătățești?</Text>
@@ -332,7 +332,7 @@ export default function OnboardingScreen() {
           </View>
         );
 
-      case 8:
+      case 7:
         return (
           <View style={styles.stepContainer}>
             <Text style={styles.stepTitle}>Ce vrei să îmbunătățești?</Text>
