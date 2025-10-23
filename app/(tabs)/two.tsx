@@ -322,7 +322,7 @@ export default function SessionScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
-      <Logo width={100} height={60} style={styles.logo} />
+      <Logo width={140} height={84} style={styles.logo} />
       <Text style={styles.title}>Sesiune - Ziua {dayNumber}</Text>
       
       {isDayLocked ? (

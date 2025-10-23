@@ -376,7 +376,7 @@ export default function OnboardingScreen() {
   return (
     <ScrollView style={styles.container}>
         <View style={styles.header}>
-          <Logo width={150} height={90} style={styles.logo} />
+          <Logo width={200} height={120} style={styles.logo} />
           <View style={styles.progressBar}>
             <View style={[styles.progressFill, { width: `${(step / 7) * 100}%` }]} />
           </View>

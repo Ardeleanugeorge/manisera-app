@@ -17,7 +17,7 @@ export default function ProgramScreen() {
 
   return (
     <View style={styles.container}>
-      <Logo width={120} height={72} style={styles.logo} />
+      <Logo width={160} height={96} style={styles.logo} />
       <Text style={styles.title}>Program 30 zile</Text>
       <FlatList
         contentContainerStyle={styles.grid}
