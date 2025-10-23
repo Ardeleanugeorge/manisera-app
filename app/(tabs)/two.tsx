@@ -8,6 +8,7 @@ import { usePremium } from '@/contexts/PremiumContext';
 import PremiumModal from '@/components/PremiumModal';
 import { getUserProfile } from '@/utils/personalization';
 import { getSessionContextMessage } from '@/constants/sessionContext';
+import Logo from '@/components/Logo';
 
 export default function SessionScreen() {
   const router = useRouter();
@@ -321,6 +322,7 @@ export default function SessionScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+      <Logo width={100} height={60} style={styles.logo} />
       <Text style={styles.title}>Sesiune - Ziua {dayNumber}</Text>
       
       {isDayLocked ? (
@@ -508,6 +510,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FAFAFA', // Alb perlat
+  },
+  logo: {
+    alignSelf: 'center',
+    marginBottom: 16,
   },
   scrollContent: {
     paddingHorizontal: 16,

@@ -3,6 +3,7 @@ import { StyleSheet, Pressable, ScrollView, TextInput } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useRouter } from 'expo-router';
 import { updateUserPreferences, getUserProfile } from '@/utils/personalization';
+import Logo from '@/components/Logo';
 
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -374,13 +375,13 @@ export default function OnboardingScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Manisera</Text>
-        <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${(step / 7) * 100}%` }]} />
+        <View style={styles.header}>
+          <Logo width={150} height={90} style={styles.logo} />
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: `${(step / 7) * 100}%` }]} />
+          </View>
+          <Text style={styles.progressText}>Pasul {step} din 7</Text>
         </View>
-        <Text style={styles.progressText}>Pasul {step} din 7</Text>
-      </View>
 
       {renderStep()}
 
@@ -418,6 +419,9 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     backgroundColor: '#F8FAFC',
     alignItems: 'center',
+  },
+  logo: {
+    marginBottom: 20,
   },
   title: {
     fontSize: 28,

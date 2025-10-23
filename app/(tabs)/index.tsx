@@ -5,6 +5,7 @@ import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
 import { generateThirtyDayPlan } from '@/constants/plan';
 import { getUserProfile } from '@/utils/personalization';
+import Logo from '@/components/Logo';
 
 export default function ProgramScreen() {
   const userProfile = getUserProfile();
@@ -16,6 +17,7 @@ export default function ProgramScreen() {
 
   return (
     <View style={styles.container}>
+      <Logo width={120} height={72} style={styles.logo} />
       <Text style={styles.title}>Program 30 zile</Text>
       <FlatList
         contentContainerStyle={styles.grid}
@@ -49,6 +51,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     backgroundColor: '#FAFAFA', // Alb perlat
+  },
+  logo: {
+    alignSelf: 'center',
+    marginBottom: 16,
   },
   title: {
     fontSize: 24,
