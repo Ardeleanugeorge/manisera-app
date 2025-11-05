@@ -152,6 +152,20 @@ export default function OnboardingScreen() {
     }
   }, [formData.birthDate, step]);
 
+  // Auto-advance when gender is selected (step 3)
+  useEffect(() => {
+    if (step === 3 && formData.gender) {
+      // Wait a bit for user to see the selection, then auto-advance
+      const timer = setTimeout(() => {
+        if (step < 7) {
+          setStep(step + 1);
+        }
+      }, 600); // 600ms delay
+      
+      return () => clearTimeout(timer);
+    }
+  }, [formData.gender, step]);
+
   const renderStep = () => {
     switch (step) {
       case 1:
