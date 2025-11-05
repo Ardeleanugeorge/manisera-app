@@ -10,7 +10,25 @@ export default function Root({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+        
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        
+        {/* iOS Meta Tags */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Manisera" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#6ECEDA" />
+        
+        {/* iOS Icons */}
+        <link rel="apple-touch-icon" href="/assets/images/icon.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/assets/images/icon.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="/assets/images/icon.png" />
+        
+        {/* Prevent zoom on input focus (iOS Safari) */}
+        <meta name="format-detection" content="telephone=no" />
 
         {/* 
           Disable body scrolling on web. This makes ScrollView components work closer to how they do on native. 
@@ -30,9 +48,39 @@ export default function Root({ children }: { children: React.ReactNode }) {
 const responsiveBackground = `
 body {
   background-color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #000;
+  }
+}
+/* Prevent iOS Safari bounce/overscroll - but allow ScrollView to work */
+html {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+/* Safe area for iPhone notches */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+/* Fix for iOS Safari viewport height issue */
+@supports (-webkit-touch-callout: none) {
+  body {
+    min-height: -webkit-fill-available;
   }
 }`;

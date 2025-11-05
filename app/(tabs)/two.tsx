@@ -109,9 +109,30 @@ export default function SessionScreen() {
   const recognitionRef = useRef<any>(null);
   const listeningRef = useRef(false);
   const repLockRef = useRef(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Speech recognition functions
   const startListening = () => {
+    if (listeningRef.current) return;
+    
+    // Request microphone permission first (iOS Safari requirement)
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(() => {
+          console.log('Microphone permission granted');
+          startRecognition();
+        })
+        .catch((err) => {
+          console.error('Microphone permission denied:', err);
+          alert('Microfonul este necesar pentru a funcționa. Te rugăm să permiți accesul la microfon.');
+        });
+    } else {
+      // Fallback for browsers that don't support getUserMedia
+      startRecognition();
+    }
+  };
+
+  const startRecognition = () => {
     if (listeningRef.current) return;
     
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -136,18 +157,32 @@ export default function SessionScreen() {
       instance.maxAlternatives = 1;
     }
     
-    // Add timeout to prevent hanging
-    const timeout = setTimeout(() => {
+    // Add timeout to prevent hanging (longer for Safari iPhone)
+    timeoutRef.current = setTimeout(() => {
       if (listeningRef.current) {
         console.log('Speech recognition timeout');
         stopListening();
+        
+        // Auto-restart for Safari iPhone if timeout
+        if (isSafariiPhone && reps < targetReps) {
+          console.log('Auto-restarting for Safari iPhone after timeout');
+          setTimeout(() => {
+            if (!listeningRef.current && reps < targetReps) {
+              startListening();
+            }
+          }, 2000);
+        }
       }
-    }, 30000); // 30 seconds timeout
+    }, isSafariiPhone ? 15000 : 30000); // 15 seconds for Safari, 30 for others
 
     instance.onstart = () => {
       console.log('Speech recognition started');
       setListening(true);
       listeningRef.current = true;
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
     };
 
       instance.onresult = (e: any) => {
@@ -274,7 +309,10 @@ export default function SessionScreen() {
 
     instance.onerror = (e: any) => {
       console.log('Speech recognition error:', e);
-      clearTimeout(timeout);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
       setListening(false);
       listeningRef.current = false;
       
@@ -302,16 +340,51 @@ export default function SessionScreen() {
 
     instance.onend = () => {
       console.log('Speech recognition ended');
-      clearTimeout(timeout);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
       setListening(false);
       listeningRef.current = false;
+      
+      // Auto-restart for Safari iPhone if session not completed
+      if (isSafariiPhone && reps < targetReps && !repLockRef.current) {
+        console.log('Safari iPhone: Auto-restarting after onend');
+        setTimeout(() => {
+          if (!listeningRef.current && reps < targetReps && !repLockRef.current) {
+            startListening();
+          }
+        }, 1000);
+      }
     };
 
-      recognitionRef.current = instance;
-    instance.start();
+    recognitionRef.current = instance;
+    
+    // Small delay before starting for Safari iPhone to ensure everything is ready
+    if (isSafariiPhone) {
+      setTimeout(() => {
+        try {
+          instance.start();
+        } catch (err) {
+          console.error('Error starting recognition:', err);
+          // Retry after a delay
+          setTimeout(() => {
+            if (!listeningRef.current) {
+              startListening();
+            }
+          }, 2000);
+        }
+      }, 100);
+    } else {
+      instance.start();
+    }
   };
 
   const stopListening = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
     if (recognitionRef.current && listening) {
       recognitionRef.current.stop();
       setListening(false);
@@ -322,7 +395,7 @@ export default function SessionScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
-      <Logo width={140} height={84} style={styles.logo} />
+      <Logo width={180} height={108} style={styles.logo} />
       <Text style={styles.title}>Sesiune - Ziua {dayNumber}</Text>
       
       {isDayLocked ? (

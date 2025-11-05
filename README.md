@@ -47,3 +47,4 @@ npm run build
 ## 📄 Licență
 
 © 2024 Manisera. Toate drepturile rezervate.
+

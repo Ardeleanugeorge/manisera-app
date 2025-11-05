@@ -160,6 +160,9 @@ export default function SessionsScreen() {
     }
   };
 
+  // Detect Safari iPhone
+  const isSafariiPhone = /iPhone|iPad|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent);
+
   // Speech recognition functions
   const startListening = () => {
     if (listeningRef.current) return;
@@ -170,6 +173,25 @@ export default function SessionsScreen() {
       return;
     }
     
+    // Request microphone permission first (iOS Safari requirement)
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(() => {
+          console.log('Microphone permission granted');
+          startRecognition();
+        })
+        .catch((err) => {
+          console.error('Microphone permission denied:', err);
+          alert('Microfonul este necesar pentru a funcționa. Te rugăm să permiți accesul la microfon.');
+        });
+    } else {
+      startRecognition();
+    }
+  };
+
+  const startRecognition = () => {
+    if (listeningRef.current) return;
+    
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
       console.log('Speech recognition not supported');
@@ -177,9 +199,18 @@ export default function SessionsScreen() {
     }
 
     const instance = new SpeechRecognition();
-    instance.continuous = true;
-    instance.interimResults = true;
-    instance.lang = 'ro-RO';
+    
+    // Configure differently for Safari iPhone
+    if (isSafariiPhone) {
+      instance.continuous = false;
+      instance.interimResults = false;
+      instance.lang = 'ro-RO';
+      instance.maxAlternatives = 1;
+    } else {
+      instance.continuous = true;
+      instance.interimResults = true;
+      instance.lang = 'ro-RO';
+    }
 
     instance.onstart = () => {
       console.log('Speech recognition started');
@@ -299,16 +330,55 @@ export default function SessionsScreen() {
       console.log('Speech recognition error:', e);
       setListening(false);
       listeningRef.current = false;
+      
+      // Handle specific errors for Safari iPhone
+      if (e.error === 'no-speech' && isSafariiPhone) {
+        console.log('Safari iPhone: No speech detected, trying again...');
+        setTimeout(() => {
+          if (!listeningRef.current && !isSessionCompleted(selectedSession)) {
+            startListening();
+          }
+        }, 1000);
+      } else if (e.error === 'not-allowed') {
+        alert('Microfonul a fost blocat. Te rugăm să permiți accesul la microfon în setările browserului.');
+      }
     };
 
     instance.onend = () => {
       console.log('Speech recognition ended');
       setListening(false);
       listeningRef.current = false;
+      
+      // Auto-restart for Safari iPhone if session not completed
+      if (isSafariiPhone && reps < targetReps && !repLockRef.current && !isSessionCompleted(selectedSession)) {
+        console.log('Safari iPhone: Auto-restarting after onend');
+        setTimeout(() => {
+          if (!listeningRef.current && reps < targetReps && !repLockRef.current) {
+            startListening();
+          }
+        }, 1000);
+      }
     };
 
     recognitionRef.current = instance;
-    instance.start();
+    
+    // Small delay before starting for Safari iPhone
+    if (isSafariiPhone) {
+      setTimeout(() => {
+        try {
+          instance.start();
+        } catch (err) {
+          console.error('Error starting recognition:', err);
+          setTimeout(() => {
+            if (!listeningRef.current) {
+              startListening();
+            }
+          }, 2000);
+        }
+      }, 100);
+    } else {
+      instance.start();
+    }
   };
 
   const stopListening = () => {
