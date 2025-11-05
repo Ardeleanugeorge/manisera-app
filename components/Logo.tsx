@@ -4,8 +4,8 @@ import { SvgXml } from 'react-native-svg';
 
 const logoXml = `
 <svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
-  <!-- MANISERA text with integrated symbols -->
-  <g font-family="serif" font-size="36" font-weight="bold" fill="#1E2A38">
+  <!-- MANISERA text with integrated symbols - centered -->
+  <g font-family="serif" font-size="36" font-weight="bold" fill="#1E2A38" transform="translate(69, 0)">
     <!-- M with integrated moon (moon forms the left stroke of M) -->
     <text x="20" y="55">M</text>
     <!-- Moon integrated into left stroke of M -->

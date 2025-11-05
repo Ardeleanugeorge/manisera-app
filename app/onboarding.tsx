@@ -421,6 +421,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
+    alignSelf: 'center',
     marginBottom: 20,
   },
   title: {
