@@ -1,0 +1,33 @@
+========================================
+CONSTRUIRE APK ANDROID - INSTRUCȚIUNI RAPIDE
+========================================
+
+Deschide PowerShell sau Command Prompt în folderul:
+C:\Users\George\Desktop\MANISERA\manisera-app
+
+Apoi rulează următoarele comenzi:
+
+1. AUTENTIFICARE EXPO (doar prima dată):
+   eas login
+   (Îți va cere email/username și parolă)
+
+2. CONFIGURARE (doar prima dată):
+   eas build:configure
+   (Va verifica configurația)
+
+3. CONSTRUIRE APK:
+   eas build --platform android --profile preview
+   (Va dura 15-30 minute)
+
+4. DUPĂ BUILD:
+   - Descarcă APK-ul din link-ul oferit
+   - Plasează-l în: public\manisera.apk
+   - Commit și push:
+     git add public/manisera.apk
+     git commit -m "Add Android APK"
+     git push
+
+========================================
+ALTERNATIVĂ: Rulează scriptul build-apk.bat
+========================================
+

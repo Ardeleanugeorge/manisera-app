@@ -26,7 +26,8 @@ export default function DownloadScreen() {
     localStorage.setItem('manisera_seen_download', 'true');
     
     // Link to APK file (will be hosted on Vercel or CDN)
-    // TODO: Update this URL after building the APK
+    // APK-ul trebuie construit cu: eas build --platform android --profile preview
+    // Apoi plasat în public/manisera.apk
     const apkUrl = 'https://manisera-app.vercel.app/manisera.apk';
     Linking.openURL(apkUrl).catch(err => {
       console.error('Error opening APK link:', err);
