@@ -197,51 +197,7 @@ export default function OnboardingScreen() {
     }
   }, [selectedTimePreference, step]);
 
-  // Auto-advance when at least one goal is selected (step 6)
-  useEffect(() => {
-    if (step === 6 && formData.goals.length > 0) {
-      // Wait a bit longer to allow user to select multiple goals, then auto-advance
-      const timer = setTimeout(() => {
-        if (step < 7) {
-          setStep(step + 1);
-        }
-      }, 1500); // 1.5s delay to allow multiple selections
-      
-      return () => clearTimeout(timer);
-    }
-  }, [formData.goals.length, step]);
-
-  // Auto-advance when focus area is selected (step 7)
-  useEffect(() => {
-    if (step === 7 && selectedFocusArea && formData.goals.length > 0) {
-      // Wait a bit for user to see the selection, then complete onboarding
-      const timer = setTimeout(() => {
-        // Complete onboarding
-        updateUserPreferences({
-          focusArea: formData.focusArea,
-          intensity: formData.intensity,
-          style: formData.style
-        });
-        
-        // Store additional user data
-        const userProfile = getUserProfile();
-        const updatedProfile = {
-          ...userProfile,
-          name: formData.name,
-          birthDate: formData.birthDate,
-          gender: formData.gender,
-          goals: formData.goals,
-          experience: formData.experience,
-          timePreference: formData.timePreference
-        };
-        localStorage.setItem('manisera_user_profile', JSON.stringify(updatedProfile));
-        
-        router.replace('/(tabs)');
-      }, 600); // 600ms delay
-      
-      return () => clearTimeout(timer);
-    }
-  }, [selectedFocusArea, formData.goals.length, step]);
+  // Step 6 (goals) and Step 7 (focus area) - no auto-advance, user must click "Continuă"/"Finalizează"
 
   const renderStep = () => {
     switch (step) {
