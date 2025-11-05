@@ -9,6 +9,23 @@ export default function IndexScreen() {
   useEffect(() => {
     // Use requestAnimationFrame to ensure the component is mounted
     const checkAndNavigate = () => {
+      // Check if user is on Android and hasn't seen download page
+      if (typeof window !== 'undefined') {
+        const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+        const isAndroid = /android/i.test(userAgent);
+        const hasSeenDownload = localStorage.getItem('manisera_seen_download');
+        
+        // If Android and hasn't seen download page, show download option
+        if (isAndroid && !hasSeenDownload) {
+          // Check if user wants to skip download (they can go to /download directly)
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get('skip') !== 'true') {
+            router.replace('/download');
+            return;
+          }
+        }
+      }
+
       const userProfile = getUserProfile();
       
       // Check if user has completed onboarding

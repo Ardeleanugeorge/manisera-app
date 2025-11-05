@@ -8,7 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build": "expo export --platform web && node scripts/copy-manifest.js",
-    "vercel-build": "expo export --platform web && node scripts/copy-manifest.js"
+    "vercel-build": "expo export --platform web && node scripts/copy-manifest.js",
+    "build:android": "eas build --platform android --profile preview",
+    "prebuild:android": "expo prebuild --platform android"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",

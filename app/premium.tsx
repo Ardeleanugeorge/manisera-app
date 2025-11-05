@@ -85,12 +85,23 @@ export default function PremiumScreen() {
   };
 
   const handlePayment = async () => {
+    // Check if online (required for payment)
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      Alert.alert(
+        'Conexiune necesară',
+        'Conexiune la internet este necesară pentru upgrade la Premium. Te rugăm să te conectezi la internet și să încerci din nou.',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+    
     setIsProcessing(true);
     
     // Simulate payment processing
+    // In production, this would call Stripe/Google Play/Apple Pay API
     setTimeout(() => {
       setIsProcessing(false);
-      upgradeToPremium();
+      upgradeToPremium(selectedPlan);
       Alert.alert(
         'Succes! 🎉',
         'Felicitări! Ai devenit membru Premium. Acum ai acces la toate funcționalitățile avansate!',
