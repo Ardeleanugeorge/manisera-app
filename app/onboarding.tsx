@@ -166,6 +166,66 @@ export default function OnboardingScreen() {
     }
   }, [formData.gender, step]);
 
+  // Auto-advance when experience is selected (step 4)
+  useEffect(() => {
+    if (step === 4 && formData.experience) {
+      // Wait a bit for user to see the selection, then auto-advance
+      const timer = setTimeout(() => {
+        if (step < 7) {
+          setStep(step + 1);
+        }
+      }, 600); // 600ms delay
+      
+      return () => clearTimeout(timer);
+    }
+  }, [formData.experience, step]);
+
+  // Auto-advance when time preference is selected (step 5)
+  useEffect(() => {
+    if (step === 5 && formData.timePreference) {
+      // Wait a bit for user to see the selection, then auto-advance
+      const timer = setTimeout(() => {
+        if (step < 7) {
+          setStep(step + 1);
+        }
+      }, 600); // 600ms delay
+      
+      return () => clearTimeout(timer);
+    }
+  }, [formData.timePreference, step]);
+
+  // Auto-advance when focus area is selected (step 7)
+  useEffect(() => {
+    if (step === 7 && formData.focusArea && formData.goals.length > 0) {
+      // Wait a bit for user to see the selection, then complete onboarding
+      const timer = setTimeout(() => {
+        // Complete onboarding
+        updateUserPreferences({
+          focusArea: formData.focusArea,
+          intensity: formData.intensity,
+          style: formData.style
+        });
+        
+        // Store additional user data
+        const userProfile = getUserProfile();
+        const updatedProfile = {
+          ...userProfile,
+          name: formData.name,
+          birthDate: formData.birthDate,
+          gender: formData.gender,
+          goals: formData.goals,
+          experience: formData.experience,
+          timePreference: formData.timePreference
+        };
+        localStorage.setItem('manisera_user_profile', JSON.stringify(updatedProfile));
+        
+        router.replace('/(tabs)');
+      }, 600); // 600ms delay
+      
+      return () => clearTimeout(timer);
+    }
+  }, [formData.focusArea, formData.goals.length, step]);
+
   const renderStep = () => {
     switch (step) {
       case 1:
