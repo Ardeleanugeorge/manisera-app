@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Pressable, ScrollView, TextInput } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useRouter } from 'expo-router';
@@ -137,6 +137,20 @@ export default function OnboardingScreen() {
     const date = new Date(year, month - 1, day);
     return date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year;
   };
+
+  // Auto-advance when date is valid (step 2)
+  useEffect(() => {
+    if (step === 2 && formData.birthDate.length === 10 && isValidDate(formData.birthDate)) {
+      // Wait a bit for user to see the validation message, then auto-advance
+      const timer = setTimeout(() => {
+        if (step < 7) {
+          setStep(step + 1);
+        }
+      }, 800); // 800ms delay to show validation
+      
+      return () => clearTimeout(timer);
+    }
+  }, [formData.birthDate, step]);
 
   const renderStep = () => {
     switch (step) {
