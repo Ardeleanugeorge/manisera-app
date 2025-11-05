@@ -8,6 +8,9 @@ import Logo from '@/components/Logo';
 export default function OnboardingScreen() {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const [selectedFocusArea, setSelectedFocusArea] = useState(false); // Track if user explicitly selected focusArea
+  const [selectedExperience, setSelectedExperience] = useState(false); // Track if user explicitly selected experience
+  const [selectedTimePreference, setSelectedTimePreference] = useState(false); // Track if user explicitly selected timePreference
   const [formData, setFormData] = useState({
     name: '',
     birthDate: '',
@@ -168,7 +171,7 @@ export default function OnboardingScreen() {
 
   // Auto-advance when experience is selected (step 4)
   useEffect(() => {
-    if (step === 4 && formData.experience) {
+    if (step === 4 && selectedExperience) {
       // Wait a bit for user to see the selection, then auto-advance
       const timer = setTimeout(() => {
         if (step < 7) {
@@ -178,11 +181,11 @@ export default function OnboardingScreen() {
       
       return () => clearTimeout(timer);
     }
-  }, [formData.experience, step]);
+  }, [selectedExperience, step]);
 
   // Auto-advance when time preference is selected (step 5)
   useEffect(() => {
-    if (step === 5 && formData.timePreference) {
+    if (step === 5 && selectedTimePreference) {
       // Wait a bit for user to see the selection, then auto-advance
       const timer = setTimeout(() => {
         if (step < 7) {
@@ -192,11 +195,25 @@ export default function OnboardingScreen() {
       
       return () => clearTimeout(timer);
     }
-  }, [formData.timePreference, step]);
+  }, [selectedTimePreference, step]);
+
+  // Auto-advance when at least one goal is selected (step 6)
+  useEffect(() => {
+    if (step === 6 && formData.goals.length > 0) {
+      // Wait a bit longer to allow user to select multiple goals, then auto-advance
+      const timer = setTimeout(() => {
+        if (step < 7) {
+          setStep(step + 1);
+        }
+      }, 1500); // 1.5s delay to allow multiple selections
+      
+      return () => clearTimeout(timer);
+    }
+  }, [formData.goals.length, step]);
 
   // Auto-advance when focus area is selected (step 7)
   useEffect(() => {
-    if (step === 7 && formData.focusArea && formData.goals.length > 0) {
+    if (step === 7 && selectedFocusArea && formData.goals.length > 0) {
       // Wait a bit for user to see the selection, then complete onboarding
       const timer = setTimeout(() => {
         // Complete onboarding
@@ -224,7 +241,7 @@ export default function OnboardingScreen() {
       
       return () => clearTimeout(timer);
     }
-  }, [formData.focusArea, formData.goals.length, step]);
+  }, [selectedFocusArea, formData.goals.length, step]);
 
   const renderStep = () => {
     switch (step) {
@@ -336,7 +353,10 @@ export default function OnboardingScreen() {
                     styles.optionCard,
                     formData.experience === level.id && styles.selectedOptionCard
                   ]}
-                  onPress={() => setFormData(prev => ({ ...prev, experience: level.id as any }))}
+                  onPress={() => {
+                    setFormData(prev => ({ ...prev, experience: level.id as any }));
+                    setSelectedExperience(true);
+                  }}
                 >
                   <Text style={[
                     styles.optionTitle,
@@ -371,7 +391,10 @@ export default function OnboardingScreen() {
                     styles.optionCard,
                     formData.timePreference === pref.id && styles.selectedOptionCard
                   ]}
-                  onPress={() => setFormData(prev => ({ ...prev, timePreference: pref.id as any }))}
+                  onPress={() => {
+                    setFormData(prev => ({ ...prev, timePreference: pref.id as any }));
+                    setSelectedTimePreference(true);
+                  }}
                 >
                   <Text style={[
                     styles.optionTitle,
@@ -436,7 +459,10 @@ export default function OnboardingScreen() {
                     styles.optionCard,
                     formData.focusArea === area.id && styles.selectedOptionCard
                   ]}
-                  onPress={() => setFormData(prev => ({ ...prev, focusArea: area.id as any }))}
+                  onPress={() => {
+                    setFormData(prev => ({ ...prev, focusArea: area.id as any }));
+                    setSelectedFocusArea(true);
+                  }}
                 >
                   <Text style={[
                     styles.optionTitle,
