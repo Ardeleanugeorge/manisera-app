@@ -44,6 +44,20 @@ npm run web
 npm run build
 ```
 
+## 📱 Construire Aplicație Android
+
+Pentru a construi APK-ul Android, vezi:
+- **[QUICK_BUILD.txt](QUICK_BUILD.txt)** - Instrucțiuni rapide
+- **[BUILD_STEPS.md](BUILD_STEPS.md)** - Ghid detaliat pas cu pas
+- **[BUILD_ANDROID.md](BUILD_ANDROID.md)** - Documentație completă
+
+### Pași rapizi:
+```bash
+cd manisera-app
+eas login                    # Autentificare Expo (doar prima dată)
+eas build --platform android --profile preview
+```
+
 ## 📄 Licență
 
 © 2024 Manisera. Toate drepturile rezervate.
