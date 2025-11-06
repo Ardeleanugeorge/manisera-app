@@ -9,6 +9,31 @@ import { Platform } from 'react-native';
 // Check if we're on web platform
 const isWeb = Platform.OS === 'web';
 
+// Cache for synchronous access on native platforms
+const storageCache: { [key: string]: string | null } = {};
+let cacheInitialized = false;
+
+// Initialize cache by loading all keys from AsyncStorage
+async function initializeCache() {
+  if (isWeb || cacheInitialized) return;
+  
+  try {
+    const allKeys = await AsyncStorage.getAllKeys();
+    const values = await AsyncStorage.multiGet(allKeys);
+    values.forEach(([key, value]) => {
+      storageCache[key] = value;
+    });
+    cacheInitialized = true;
+  } catch (error) {
+    console.error('Error initializing storage cache:', error);
+  }
+}
+
+// Initialize cache on import (for native)
+if (!isWeb) {
+  initializeCache();
+}
+
 /**
  * Get item from storage
  */
@@ -22,7 +47,10 @@ export async function getItem(key: string): Promise<string | null> {
   } else {
     // Use AsyncStorage on native
     try {
-      return await AsyncStorage.getItem(key);
+      const value = await AsyncStorage.getItem(key);
+      // Update cache
+      storageCache[key] = value;
+      return value;
     } catch (error) {
       console.error('Error getting item from storage:', error);
       return null;
@@ -43,6 +71,8 @@ export async function setItem(key: string, value: string): Promise<void> {
     // Use AsyncStorage on native
     try {
       await AsyncStorage.setItem(key, value);
+      // Update cache
+      storageCache[key] = value;
     } catch (error) {
       console.error('Error setting item in storage:', error);
     }
@@ -62,6 +92,8 @@ export async function removeItem(key: string): Promise<void> {
     // Use AsyncStorage on native
     try {
       await AsyncStorage.removeItem(key);
+      // Update cache
+      delete storageCache[key];
     } catch (error) {
       console.error('Error removing item from storage:', error);
     }
@@ -89,8 +121,7 @@ export async function clear(): Promise<void> {
 
 /**
  * Synchronous version for getItem (for compatibility with existing code)
- * WARNING: On native, this will return null initially and update asynchronously
- * Use the async version when possible
+ * On native, uses cache that's populated asynchronously
  */
 export function getItemSync(key: string): string | null {
   if (isWeb) {
@@ -99,18 +130,19 @@ export function getItemSync(key: string): string | null {
     }
     return null;
   } else {
-    // On native, we can't do synchronous reads
-    // This is a limitation - the caller should use async version
-    // For now, return null and log a warning
-    console.warn('getItemSync called on native platform - use async getItem instead');
-    return null;
+    // On native, use cache
+    // If cache not initialized yet, try to get it (will be null initially)
+    if (!cacheInitialized) {
+      // Try to initialize cache synchronously (won't work, but we'll return cached value)
+      initializeCache();
+    }
+    return storageCache[key] ?? null;
   }
 }
 
 /**
  * Synchronous version for setItem (for compatibility with existing code)
- * WARNING: On native, this will queue the operation
- * Use the async version when possible
+ * On native, updates cache immediately and queues async operation
  */
 export function setItemSync(key: string, value: string): void {
   if (isWeb) {
@@ -118,7 +150,9 @@ export function setItemSync(key: string, value: string): void {
       window.localStorage.setItem(key, value);
     }
   } else {
-    // On native, queue the async operation
+    // Update cache immediately
+    storageCache[key] = value;
+    // Queue the async operation
     AsyncStorage.setItem(key, value).catch(error => {
       console.error('Error setting item in storage (async):', error);
     });
@@ -134,10 +168,13 @@ export function removeItemSync(key: string): void {
       window.localStorage.removeItem(key);
     }
   } else {
-    // On native, queue the async operation
+    // Update cache immediately
+    delete storageCache[key];
+    // Queue the async operation
     AsyncStorage.removeItem(key).catch(error => {
       console.error('Error removing item from storage (async):', error);
     });
   }
 }
+
 
