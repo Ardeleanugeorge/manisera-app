@@ -4,6 +4,7 @@ import { Text, View } from '@/components/Themed';
 import { useRouter } from 'expo-router';
 import { updateUserPreferences, getUserProfile } from '@/utils/personalization';
 import Logo from '@/components/Logo';
+import { setItemSync } from '@/utils/storage';
 
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -100,7 +101,8 @@ export default function OnboardingScreen() {
         experience: formData.experience,
         timePreference: formData.timePreference
       };
-      localStorage.setItem('manisera_user_profile', JSON.stringify(updatedProfile));
+      // Save profile using storage utility
+      setItemSync('manisera_user_profile', JSON.stringify(updatedProfile));
       
       router.replace('/(tabs)');
     }

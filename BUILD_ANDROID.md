@@ -112,3 +112,4 @@ Aplicația este deja configurată pentru Android în `app.json`:
 
 **"Installation blocked"**: Utilizatorii trebuie să permită instalarea din "sursa necunoscută" în setările Android
 
+

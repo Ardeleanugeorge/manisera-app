@@ -3,6 +3,7 @@ import { StyleSheet, Pressable, ScrollView, Linking, Platform } from 'react-nati
 import { Text, View } from '@/components/Themed';
 import { useRouter } from 'expo-router';
 import Logo from '@/components/Logo';
+import { setItemSync } from '@/utils/storage';
 
 export default function DownloadScreen() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function DownloadScreen() {
 
   const handleDownloadAPK = () => {
     // Mark that user has seen download page
-    localStorage.setItem('manisera_seen_download', 'true');
+    setItemSync('manisera_seen_download', 'true');
     
     // Link to APK file (will be hosted on Vercel or CDN)
     // APK-ul trebuie construit cu: eas build --platform android --profile preview
@@ -37,7 +38,7 @@ export default function DownloadScreen() {
 
   const handleOpenWebApp = () => {
     // Mark that user has seen download page
-    localStorage.setItem('manisera_seen_download', 'true');
+    setItemSync('manisera_seen_download', 'true');
     router.replace('/');
   };
 

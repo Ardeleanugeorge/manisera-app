@@ -1,5 +1,7 @@
 // Personalization utilities for unique user experiences
 
+import { getItemSync, setItemSync } from './storage';
+
 export interface UserProfile {
   id: string;
   name?: string;
@@ -22,7 +24,7 @@ export function generateUserId(): string {
 
 // Get or create user profile
 export function getUserProfile(): UserProfile {
-  const stored = localStorage.getItem('manisera_user_profile');
+  const stored = getItemSync('manisera_user_profile');
   if (stored) {
     return JSON.parse(stored);
   }
@@ -36,7 +38,7 @@ export function getUserProfile(): UserProfile {
     }
   };
   
-  localStorage.setItem('manisera_user_profile', JSON.stringify(newProfile));
+  setItemSync('manisera_user_profile', JSON.stringify(newProfile));
   return newProfile;
 }
 
@@ -44,7 +46,7 @@ export function getUserProfile(): UserProfile {
 export function updateUserPreferences(preferences: Partial<UserProfile['preferences']>) {
   const profile = getUserProfile();
   profile.preferences = { ...profile.preferences, ...preferences };
-  localStorage.setItem('manisera_user_profile', JSON.stringify(profile));
+  setItemSync('manisera_user_profile', JSON.stringify(profile));
   return profile;
 }
 
@@ -228,5 +230,6 @@ export function generateAIPersonalizedAffirmations(
   // Generate unique selection based on user, day, and session
   return generatePersonalizedAffirmations(personalizedAffirmations, userProfile, day, session);
 }
+
 
 

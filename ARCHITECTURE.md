@@ -131,3 +131,4 @@ if (userDoc.exists()) {
 **Premium funcționează offline** - dar este doar pe acel dispozitiv.
 **Pentru sincronizare între dispozitive** - necesită backend (Firebase, Google Play, etc.)
 
+

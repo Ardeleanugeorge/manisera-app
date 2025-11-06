@@ -4,6 +4,7 @@ import { Text, View } from '@/components/Themed';
 import { generateThirtyDayPlan } from '@/constants/plan';
 import { getUserProfile } from '@/utils/personalization';
 import { usePremium } from '@/contexts/PremiumContext';
+import { getItemSync } from '@/utils/storage';
 
 export default function DayDetailScreen() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function DayDetailScreen() {
   const plan = generateThirtyDayPlan(userProfile.preferences?.focusArea || 'bani', userProfile);
   
   // Check which days are completed
-  const completedDays = JSON.parse(localStorage.getItem('manisera_completed_days') || '[]');
+  const completedDays = JSON.parse(getItemSync('manisera_completed_days') || '[]');
   const lastCompletedDay = completedDays.length > 0 ? Math.max(...completedDays) : 0;
   
   // Check if this day is locked - only allow access to the next day in sequence

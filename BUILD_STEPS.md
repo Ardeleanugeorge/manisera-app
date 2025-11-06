@@ -65,3 +65,4 @@ eas login
 - Verifică că ai toate dependențele instalate: `npm install`
 - Verifică că `app.json` este corect configurat
 
+

@@ -10,6 +10,8 @@
  * 4. Google Play Billing (pentru Android)
  */
 
+import { getItemSync, setItemSync } from './storage';
+
 export interface PremiumStatus {
   isPremium: boolean;
   userId: string;
@@ -31,12 +33,10 @@ export function generateUserId(): string {
 
 // Get or create user ID
 export function getUserId(): string {
-  if (typeof window === 'undefined') return generateUserId();
-  
-  let userId = localStorage.getItem('manisera_user_id');
+  let userId = getItemSync('manisera_user_id');
   if (!userId) {
     userId = generateUserId();
-    localStorage.setItem('manisera_user_id', userId);
+    setItemSync('manisera_user_id', userId);
   }
   return userId;
 }
@@ -48,12 +48,8 @@ export function getUserId(): string {
  * IMPORTANT: Verifică expirarea OFFLINE - funcționează fără internet
  */
 export function getPremiumStatus(): PremiumStatus {
-  if (typeof window === 'undefined') {
-    return { isPremium: false, userId: generateUserId() };
-  }
-
   const userId = getUserId();
-  const premiumData = localStorage.getItem('manisera_premium_data');
+  const premiumData = getItemSync('manisera_premium_data');
   
   if (premiumData) {
     try {
@@ -71,7 +67,7 @@ export function getPremiumStatus(): PremiumStatus {
   }
   
   // Fallback to simple check (for old data format)
-  const isPremium = localStorage.getItem('manisera_premium') === 'true';
+  const isPremium = getItemSync('manisera_premium') === 'true';
   return { isPremium, userId };
 }
 
@@ -80,10 +76,8 @@ export function getPremiumStatus(): PremiumStatus {
  * In production, this should also sync with backend
  */
 export function savePremiumStatus(status: PremiumStatus): void {
-  if (typeof window === 'undefined') return;
-  
-  localStorage.setItem('manisera_premium', status.isPremium ? 'true' : 'false');
-  localStorage.setItem('manisera_premium_data', JSON.stringify(status));
+  setItemSync('manisera_premium', status.isPremium ? 'true' : 'false');
+  setItemSync('manisera_premium_data', JSON.stringify(status));
   
   // TODO: Sync with backend
   // syncPremiumWithBackend(status);

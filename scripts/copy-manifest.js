@@ -18,3 +18,4 @@ if (fs.existsSync(publicManifest)) {
 } else {
   console.warn('⚠️  manifest.json not found in public/');
 }
+

@@ -6,6 +6,7 @@ import { usePremium } from '@/contexts/PremiumContext';
 import PremiumModal from '@/components/PremiumModal';
 import { getUserProfile } from '@/utils/personalization';
 import { getSessionContextMessage } from '@/constants/sessionContext';
+import { getItemSync, setItemSync } from '@/utils/storage';
 
 type SessionType = 'morning' | 'afternoon' | 'evening';
 
@@ -27,19 +28,19 @@ export default function SessionsScreen() {
   const plan = useMemo(() => generateThirtyDayPlan(userProfile.preferences?.focusArea || 'bani', userProfile), [userProfile]);
   
   // Check which days are completed for premium users
-  const completedDays = JSON.parse(localStorage.getItem('manisera_completed_days') || '[]');
+  const completedDays = JSON.parse(getItemSync('manisera_completed_days') || '[]');
   const lastCompletedDay = completedDays.length > 0 ? Math.max(...completedDays) : 0;
   
   // Check if user can access this day (only one day per day for premium users too)
   const currentDate = new Date();
   const todayString = currentDate.toDateString();
-  const lastAccessDate = localStorage.getItem('manisera_last_access_date');
-  const lastCompletedDayDate = localStorage.getItem('manisera_last_completed_day_date');
+  const lastAccessDate = getItemSync('manisera_last_access_date');
+  const lastCompletedDayDate = getItemSync('manisera_last_completed_day_date');
   
   // If it's a new day, reset access
   if (lastAccessDate !== todayString) {
-    localStorage.setItem('manisera_last_access_date', todayString);
-    localStorage.setItem('manisera_last_completed_day_date', '');
+    setItemSync('manisera_last_access_date', todayString);
+    setItemSync('manisera_last_completed_day_date', '');
   }
   
   // Check if user already completed a day today
@@ -59,7 +60,7 @@ export default function SessionsScreen() {
   
   // Check if previous sessions are completed
   const getCompletedSessions = () => {
-    const completed = localStorage.getItem(`manisera_completed_sessions_${allowedDay}`) || '{}';
+    const completed = getItemSync(`manisera_completed_sessions_${allowedDay}`) || '{}';
     return JSON.parse(completed);
   };
   
@@ -128,23 +129,23 @@ export default function SessionsScreen() {
       console.log(`🎯 Current affirmation: ${currentAffirmation}, Total affirmations: ${sessionAffirmations.length}`);
       const completedSessions = getCompletedSessions();
       completedSessions[selectedSession] = true;
-      localStorage.setItem(`manisera_completed_sessions_${allowedDay}`, JSON.stringify(completedSessions));
+      setItemSync(`manisera_completed_sessions_${allowedDay}`, JSON.stringify(completedSessions));
       
-      console.log(`🎉 Session ${selectedSession} completed! Updated localStorage:`, completedSessions);
-      console.log(`🎉 New localStorage value:`, localStorage.getItem(`manisera_completed_sessions_${selectedDay}`));
+      console.log(`🎉 Session ${selectedSession} completed! Updated storage:`, completedSessions);
+      console.log(`🎉 New storage value:`, getItemSync(`manisera_completed_sessions_${selectedDay}`));
       
       // Check if all sessions are completed for this day
       const allSessionsCompleted = completedSessions.morning && completedSessions.afternoon && completedSessions.evening;
       
       if (allSessionsCompleted) {
         // Mark the entire day as completed
-        const completedDays = JSON.parse(localStorage.getItem('manisera_completed_days') || '[]');
+        const completedDays = JSON.parse(getItemSync('manisera_completed_days') || '[]');
         if (!completedDays.includes(allowedDay)) {
           completedDays.push(allowedDay);
-          localStorage.setItem('manisera_completed_days', JSON.stringify(completedDays));
+          setItemSync('manisera_completed_days', JSON.stringify(completedDays));
           
           // Mark that user completed a day today
-          localStorage.setItem('manisera_last_completed_day_date', todayString);
+          setItemSync('manisera_last_completed_day_date', todayString);
           
           console.log('Day', allowedDay, 'marked as completed');
           
@@ -267,24 +268,24 @@ export default function SessionsScreen() {
                   const completedSessions = getCompletedSessions();
                   console.log(`🎯 Before update - completedSessions:`, completedSessions);
                   completedSessions[selectedSession] = true;
-                  localStorage.setItem(`manisera_completed_sessions_${allowedDay}`, JSON.stringify(completedSessions));
+                  setItemSync(`manisera_completed_sessions_${allowedDay}`, JSON.stringify(completedSessions));
                   
-                  console.log(`🎉 Session ${selectedSession} completed! Updated localStorage:`, completedSessions);
-                  console.log(`🎉 localStorage key: manisera_completed_sessions_${allowedDay}`);
-                  console.log(`🎉 localStorage value:`, localStorage.getItem(`manisera_completed_sessions_${allowedDay}`));
+                  console.log(`🎉 Session ${selectedSession} completed! Updated storage:`, completedSessions);
+                  console.log(`🎉 storage key: manisera_completed_sessions_${allowedDay}`);
+                  console.log(`🎉 storage value:`, getItemSync(`manisera_completed_sessions_${allowedDay}`));
                   
                   // Check if all sessions are completed for this day
                   const allSessionsCompleted = completedSessions.morning && completedSessions.afternoon && completedSessions.evening;
                   
                   if (allSessionsCompleted) {
                     // Mark the entire day as completed
-                    const completedDays = JSON.parse(localStorage.getItem('manisera_completed_days') || '[]');
+                    const completedDays = JSON.parse(getItemSync('manisera_completed_days') || '[]');
                     if (!completedDays.includes(allowedDay)) {
                       completedDays.push(allowedDay);
-                      localStorage.setItem('manisera_completed_days', JSON.stringify(completedDays));
+                      setItemSync('manisera_completed_days', JSON.stringify(completedDays));
                       
                       // Mark that user completed a day today
-                      localStorage.setItem('manisera_last_completed_day_date', todayString);
+                      setItemSync('manisera_last_completed_day_date', todayString);
                       
                       console.log('Day', allowedDay, 'marked as completed');
                       

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { getUserProfile } from '@/utils/personalization';
 import { View, Text } from 'react-native';
+import { getItemSync } from '@/utils/storage';
 
 export default function IndexScreen() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function IndexScreen() {
       if (typeof window !== 'undefined') {
         const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
         const isAndroid = /android/i.test(userAgent);
-        const hasSeenDownload = localStorage.getItem('manisera_seen_download');
+        const hasSeenDownload = getItemSync('manisera_seen_download');
         
         // If Android and hasn't seen download page, show download option
         if (isAndroid && !hasSeenDownload) {
@@ -47,7 +48,7 @@ export default function IndexScreen() {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
       <Text>Loading...</Text>
       <Text style={{ marginTop: 20, fontSize: 12, color: '#666' }}>
-        Pentru a testa onboarding-ul: localStorage.clear() în console
+        Se încarcă...
       </Text>
     </View>
   );
