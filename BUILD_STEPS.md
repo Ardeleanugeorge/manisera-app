@@ -66,3 +66,4 @@ eas login
 - Verifică că `app.json` este corect configurat
 
 
+

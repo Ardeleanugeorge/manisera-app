@@ -189,3 +189,4 @@ Dacă online → Verifică cu backend (reînnoire?)
 - ❌ **NU funcționează offline** - necesită internet pentru plată
 
 
+

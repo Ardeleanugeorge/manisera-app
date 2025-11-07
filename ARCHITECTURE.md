@@ -132,3 +132,4 @@ if (userDoc.exists()) {
 **Pentru sincronizare între dispozitive** - necesită backend (Firebase, Google Play, etc.)
 
 
+
