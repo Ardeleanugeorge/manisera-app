@@ -12,6 +12,10 @@ export default function Root({ children }: { children: React.ReactNode }) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
         
+        {/* Favicon */}
+        <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+        <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png" />
+        
         {/* PWA Manifest */}
         <link rel="manifest" href="/manifest.json" />
         
