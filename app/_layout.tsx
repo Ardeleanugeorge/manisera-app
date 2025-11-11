@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { PremiumProvider } from '@/contexts/PremiumContext';
+import { usePWA } from '@/utils/usePWA';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -48,6 +49,9 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  
+  // Înregistrează PWA (doar pe web)
+  usePWA();
 
   return (
     <PremiumProvider>

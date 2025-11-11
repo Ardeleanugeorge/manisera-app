@@ -3,6 +3,7 @@
   "short_name": "Manisera",
   "description": "Aplicație de afirmații personalizate pentru prosperitate și bunăstare",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#6ECEDA",
@@ -22,7 +23,11 @@
     }
   ],
   "categories": ["health", "lifestyle", "productivity"],
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "dir": "ltr",
+  "lang": "ro",
+  "screenshots": []
 }
+
 
 

@@ -4,11 +4,13 @@ import { Text, View } from '@/components/Themed';
 import { useRouter } from 'expo-router';
 import Logo from '@/components/Logo';
 import { setItemSync } from '@/utils/storage';
+import { usePWA } from '@/utils/usePWA';
 
 export default function DownloadScreen() {
   const router = useRouter();
   const [isAndroid, setIsAndroid] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const { isInstallable, isInstalled, installApp } = usePWA();
 
   useEffect(() => {
     // Detect device type
@@ -21,6 +23,15 @@ export default function DownloadScreen() {
       setIsIOS(isIOSDevice);
     }
   }, []);
+
+  const handleInstallPWA = async () => {
+    setItemSync('manisera_seen_download', 'true');
+    const installed = await installApp();
+    if (installed) {
+      // Aplicația a fost instalată, redirecționează
+      router.replace('/(tabs)');
+    }
+  };
 
   const handleDownloadAPK = () => {
     // Mark that user has seen download page
@@ -62,20 +73,43 @@ export default function DownloadScreen() {
 
         {isAndroid && (
           <View style={styles.androidContainer}>
-            <Text style={styles.androidTitle}>📱 Descarcă aplicația pentru Android</Text>
+            <Text style={styles.androidTitle}>📱 Instalează aplicația pe Android</Text>
             <Text style={styles.androidDescription}>
-              Instalează aplicația Manisera pe telefonul tău Android pentru cea mai bună experiență.
+              Instalează Manisera direct din browser - fără APK, fără probleme! Aplicația va funcționa ca o aplicație nativă.
+            </Text>
+            <Text style={styles.infoText}>
+              💡 <Text style={styles.bold}>PWA vs APK:</Text> PWA se instalează direct din browser și funcționează ca o aplicație normală, fără erori de instalare. APK-ul este necesar doar dacă vrei să publici în Google Play Store.
             </Text>
             
-            <Pressable style={styles.downloadButton} onPress={handleDownloadAPK}>
-              <Text style={styles.downloadButtonText}>📥 Descarcă APK</Text>
-            </Pressable>
+            {/* Buton PWA - recomandat */}
+            {isInstallable && !isInstalled && (
+              <>
+                <Pressable style={styles.installPWAButton} onPress={handleInstallPWA}>
+                  <Text style={styles.installPWAButtonText}>✨ Instalează aplicația</Text>
+                  <Text style={styles.installPWASubtext}>Recomandat - Instalare rapidă și sigură</Text>
+                </Pressable>
+                <View style={styles.divider} />
+              </>
+            )}
 
-            <Text style={styles.note}>
-              ⚠️ După descărcare, permite instalarea din surse necunoscute în setările telefonului.
-            </Text>
+            {isInstalled && (
+              <View style={styles.installedBadge}>
+                <Text style={styles.installedText}>✅ Aplicația este instalată!</Text>
+              </View>
+            )}
 
-            <View style={styles.divider} />
+            {/* Opțiune APK - doar dacă PWA nu este disponibil */}
+            {!isInstallable && !isInstalled && (
+              <>
+                <Pressable style={styles.downloadButton} onPress={handleDownloadAPK}>
+                  <Text style={styles.downloadButtonText}>📥 Descarcă APK (alternativă)</Text>
+                </Pressable>
+                <Text style={styles.note}>
+                  ⚠️ După descărcare, permite instalarea din surse necunoscute în setările telefonului.
+                </Text>
+                <View style={styles.divider} />
+              </>
+            )}
             
             <Text style={styles.orText}>sau</Text>
             
@@ -87,9 +121,14 @@ export default function DownloadScreen() {
 
         {isIOS && (
           <View style={styles.iosContainer}>
-            <Text style={styles.iosTitle}>🍎 Pentru iOS</Text>
+            <Text style={styles.iosTitle}>🍎 Instalează pe iOS</Text>
             <Text style={styles.iosDescription}>
               Adaugă aplicația la ecranul principal pentru o experiență mai bună.
+            </Text>
+            <Text style={styles.iosInstructions}>
+              1. Apasă butonul Share (partajare) în Safari{'\n'}
+              2. Selectează "Adaugă la ecranul principal"{'\n'}
+              3. Apasă "Adaugă"
             </Text>
             
             <Pressable style={styles.webButton} onPress={handleOpenWebApp}>
@@ -212,8 +251,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#075985',
     textAlign: 'center',
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  iosInstructions: {
+    fontSize: 13,
+    color: '#075985',
+    textAlign: 'center',
     marginBottom: 24,
     lineHeight: 20,
+    backgroundColor: '#E0F2FE',
+    padding: 16,
+    borderRadius: 8,
   },
   desktopContainer: {
     width: '100%',
@@ -239,6 +288,31 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     lineHeight: 20,
   },
+  installPWAButton: {
+    backgroundColor: '#6ECEDA',
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+    width: '100%',
+  },
+  installPWAButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  installPWASubtext: {
+    color: '#fff',
+    fontSize: 12,
+    marginTop: 4,
+    opacity: 0.9,
+  },
   downloadButton: {
     backgroundColor: '#059669',
     paddingVertical: 16,
@@ -256,6 +330,19 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  installedBadge: {
+    backgroundColor: '#10B981',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  installedText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   webButton: {
     backgroundColor: '#6ECEDA',
@@ -276,6 +363,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontStyle: 'italic',
     marginTop: 8,
+  },
+  infoText: {
+    fontSize: 12,
+    color: '#047857',
+    textAlign: 'left',
+    marginBottom: 16,
+    lineHeight: 18,
+    backgroundColor: '#ECFDF5',
+    padding: 12,
+    borderRadius: 8,
+  },
+  bold: {
+    fontWeight: 'bold',
   },
   divider: {
     height: 1,

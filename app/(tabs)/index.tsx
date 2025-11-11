@@ -7,6 +7,7 @@ import { generateThirtyDayPlan } from '@/constants/plan';
 import { getUserProfile } from '@/utils/personalization';
 import Logo from '@/components/Logo';
 import { getItemSync } from '@/utils/storage';
+import InstallPWAButton from '@/components/InstallPWAButton';
 
 export default function ProgramScreen() {
   const userProfile = getUserProfile();
@@ -19,6 +20,7 @@ export default function ProgramScreen() {
   return (
     <View style={styles.container}>
       <Logo width={200} height={120} style={styles.logo} />
+      <InstallPWAButton />
       <Text style={styles.title}>Program 30 zile</Text>
       <FlatList
         contentContainerStyle={styles.grid}
