@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Pressable, ScrollView, Linking, Platform } from 'react-native';
+import { StyleSheet, Pressable, ScrollView, Platform } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useRouter } from 'expo-router';
 import Logo from '@/components/Logo';
@@ -33,19 +33,6 @@ export default function DownloadScreen() {
     }
   };
 
-  const handleDownloadAPK = () => {
-    // Mark that user has seen download page
-    setItemSync('manisera_seen_download', 'true');
-    
-    // Link to APK file (will be hosted on Vercel or CDN)
-    // APK-ul trebuie construit cu: eas build --platform android --profile preview
-    // Apoi plasat în public/manisera.apk
-    const apkUrl = 'https://manisera-app.vercel.app/manisera.apk';
-    Linking.openURL(apkUrl).catch(err => {
-      console.error('Error opening APK link:', err);
-      alert('Nu s-a putut descărca aplicația. Te rugăm să încerci din nou sau continuă pe web.');
-    });
-  };
 
   const handleOpenWebApp = () => {
     // Mark that user has seen download page
@@ -75,10 +62,10 @@ export default function DownloadScreen() {
           <View style={styles.androidContainer}>
             <Text style={styles.androidTitle}>📱 Instalează aplicația pe Android</Text>
             <Text style={styles.androidDescription}>
-              Instalează Manisera direct din browser - fără APK, fără probleme! Aplicația va funcționa ca o aplicație nativă.
+              Instalează Manisera direct din browser! Aplicația se instalează instant și funcționează ca o aplicație nativă, fără erori de instalare.
             </Text>
             <Text style={styles.infoText}>
-              💡 <Text style={styles.bold}>PWA vs APK:</Text> PWA se instalează direct din browser și funcționează ca o aplicație normală, fără erori de instalare. APK-ul este necesar doar dacă vrei să publici în Google Play Store.
+              💡 <Text style={styles.bold}>Instalare PWA:</Text> Aplicația se instalează direct din browser și funcționează offline, exact ca o aplicație normală instalată din Google Play.
             </Text>
             
             {/* Buton PWA - recomandat */}
@@ -98,17 +85,13 @@ export default function DownloadScreen() {
               </View>
             )}
 
-            {/* Opțiune APK - doar dacă PWA nu este disponibil */}
+            {/* Mesaj dacă PWA nu este disponibil */}
             {!isInstallable && !isInstalled && (
-              <>
-                <Pressable style={styles.downloadButton} onPress={handleDownloadAPK}>
-                  <Text style={styles.downloadButtonText}>📥 Descarcă APK (alternativă)</Text>
-                </Pressable>
-                <Text style={styles.note}>
-                  ⚠️ După descărcare, permite instalarea din surse necunoscute în setările telefonului.
+              <View style={styles.infoBox}>
+                <Text style={styles.infoBoxText}>
+                  💡 Pentru a instala aplicația, folosește butonul "Adaugă la ecranul principal" din meniul browserului (⋮ sau ⋯).
                 </Text>
-                <View style={styles.divider} />
-              </>
+              </View>
             )}
             
             <Text style={styles.orText}>sau</Text>
@@ -141,17 +124,11 @@ export default function DownloadScreen() {
           <View style={styles.desktopContainer}>
             <Text style={styles.desktopTitle}>💻 Accesează aplicația</Text>
             <Text style={styles.desktopDescription}>
-              Poți accesa Manisera direct în browser sau descărca aplicația pentru Android.
+              Poți accesa Manisera direct în browser. Pe telefon, poți instala aplicația direct din browser (PWA).
             </Text>
             
             <Pressable style={styles.webButton} onPress={handleOpenWebApp}>
               <Text style={styles.webButtonText}>🌐 Deschide aplicația</Text>
-            </Pressable>
-
-            <View style={styles.divider} />
-            
-            <Pressable style={styles.downloadButton} onPress={handleDownloadAPK}>
-              <Text style={styles.downloadButtonText}>📥 Descarcă pentru Android</Text>
             </Pressable>
           </View>
         )}
@@ -313,23 +290,19 @@ const styles = StyleSheet.create({
     marginTop: 4,
     opacity: 0.9,
   },
-  downloadButton: {
-    backgroundColor: '#059669',
-    paddingVertical: 16,
-    paddingHorizontal: 32,
+  infoBox: {
+    backgroundColor: '#F0F9FF',
+    padding: 16,
     borderRadius: 12,
-    alignItems: 'center',
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#0EA5E9',
   },
-  downloadButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+  infoBoxText: {
+    fontSize: 13,
+    color: '#075985',
+    lineHeight: 20,
+    textAlign: 'center',
   },
   installedBadge: {
     backgroundColor: '#10B981',
