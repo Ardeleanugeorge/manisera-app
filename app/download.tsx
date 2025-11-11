@@ -40,14 +40,6 @@ export default function DownloadScreen() {
     router.replace('/');
   };
 
-  const handleInstallPWA = () => {
-    // For PWA installation (if supported)
-    if ('serviceWorker' in navigator && 'getInstalledRelatedApps' in navigator) {
-      // PWA installation prompt
-      alert('Pentru a instala aplicația, apasă butonul "Adaugă la ecranul principal" în meniul browserului.');
-    }
-  };
-
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
