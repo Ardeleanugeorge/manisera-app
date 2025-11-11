@@ -85,12 +85,6 @@ export default function DownloadScreen() {
                 </Text>
               </View>
             )}
-            
-            <Text style={styles.orText}>sau</Text>
-            
-            <Pressable style={styles.webButton} onPress={handleOpenWebApp}>
-              <Text style={styles.webButtonText}>🌐 Continuă pe web</Text>
-            </Pressable>
           </View>
         )}
 
@@ -105,10 +99,6 @@ export default function DownloadScreen() {
               2. Selectează "Adaugă la ecranul principal"{'\n'}
               3. Apasă "Adaugă"
             </Text>
-            
-            <Pressable style={styles.webButton} onPress={handleOpenWebApp}>
-              <Text style={styles.webButtonText}>🌐 Deschide aplicația web</Text>
-            </Pressable>
           </View>
         )}
 
