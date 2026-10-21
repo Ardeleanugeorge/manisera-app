@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Pressable, ScrollView, Platform } from 'react-native';
+import { StyleSheet, Pressable, ScrollView, Platform, Linking } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useRouter } from 'expo-router';
 import Logo from '@/components/Logo';
@@ -40,6 +40,11 @@ export default function DownloadScreen() {
     router.replace('/');
   };
 
+  const handleOpenPlayStore = () => {
+    setItemSync('manisera_seen_download', 'true');
+    Linking.openURL('https://play.google.com/store/apps/details?id=com.manisera.app');
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
@@ -50,6 +55,17 @@ export default function DownloadScreen() {
           Aplicația ta de afirmații personalizate pentru prosperitate și bunăstare
         </Text>
 
+        <View style={styles.storeRow}>
+          <Pressable style={styles.playButton} onPress={handleOpenPlayStore}>
+            <Text style={styles.playKicker}>Descarcă din</Text>
+            <Text style={styles.playTitle}>Google Play</Text>
+          </Pressable>
+          <View style={styles.iosSoon} accessibilityRole="text" accessibilityLabel="În curând pe App Store">
+            <Text style={styles.iosSoonKicker}>În curând pe</Text>
+            <Text style={styles.iosSoonTitle}>App Store</Text>
+          </View>
+        </View>
+
         {isAndroid && (
           <View style={styles.androidContainer}>
             <Text style={styles.androidTitle}>📱 Instalează aplicația pe Android</Text>
@@ -59,7 +75,7 @@ export default function DownloadScreen() {
             <Text style={styles.infoText}>
               💡 <Text style={styles.bold}>Instalare PWA:</Text> Aplicația se instalează direct din browser și funcționează offline, exact ca o aplicație normală instalată din Google Play.
             </Text>
-            
+
             {/* Buton PWA - recomandat */}
             {isInstallable && !isInstalled && (
               <>
@@ -90,9 +106,9 @@ export default function DownloadScreen() {
 
         {isIOS && (
           <View style={styles.iosContainer}>
-            <Text style={styles.iosTitle}>🍎 Instalează pe iOS</Text>
+            <Text style={styles.iosTitle}>În curând pe App Store</Text>
             <Text style={styles.iosDescription}>
-              Adaugă aplicația la ecranul principal pentru o experiență mai bună.
+              Aplicația pentru iPhone este în pregătire. Până atunci, o poți adăuga pe ecranul principal din Safari.
             </Text>
             <Text style={styles.iosInstructions}>
               1. Apasă butonul Share (partajare) în Safari{'\n'}
@@ -162,8 +178,54 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#6B7280',
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 28,
     lineHeight: 24,
+  },
+  storeRow: {
+    width: '100%',
+    maxWidth: 400,
+    gap: 12,
+    marginBottom: 28,
+  },
+  playButton: {
+    backgroundColor: '#000',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#A6A6A6',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  playKicker: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    letterSpacing: 0.3,
+  },
+  playTitle: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: '700',
+    marginTop: 2,
+  },
+  iosSoon: {
+    backgroundColor: '#111827',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#A6A6A6',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  iosSoonKicker: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    letterSpacing: 0.3,
+  },
+  iosSoonTitle: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: '700',
+    marginTop: 2,
   },
   androidContainer: {
     width: '100%',
